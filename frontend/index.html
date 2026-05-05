@@ -1,429 +1,852 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>FinPilot Lite — Your Financial Co-Pilot</title>
-<meta name="description" content="FinPilot Lite: a modern finance dashboard to track portfolio, simulate trades, and view market insights."/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0f1117;--card:#1a1d2e;--card2:#20243a;
-  --accent:#00d4aa;--accent2:#00b896;
-  --red:#ff4d6d;--green:#00d4aa;
-  --text:#e8eaf0;--muted:#6b7280;--border:#2a2d3e;
-  --nav:#13162a;
-}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>FinPilot Lite — Your Financial Co-Pilot</title>
+  <meta name="description"
+    content="FinPilot Lite: a modern finance dashboard to track portfolio, simulate trades, and view market insights." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* ── Navbar ── */
-nav{background:var(--nav);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
-.logo{display:flex;align-items:center;gap:.75rem}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),#0099ff);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#fff}
-.logo-text h1{font-size:1.1rem;font-weight:700;color:var(--text)}
-.logo-text span{font-size:.72rem;color:var(--muted);display:block}
-.nav-tabs{display:flex;gap:.25rem}
-.nav-tab{background:none;border:none;color:var(--muted);padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:500;transition:all .2s}
-.nav-tab:hover{color:var(--text);background:var(--card)}
-.nav-tab.active{color:var(--accent);background:rgba(0,212,170,.1)}
-.status-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d2e;
+      --card2: #20243a;
+      --accent: #00d4aa;
+      --accent2: #00b896;
+      --red: #ff4d6d;
+      --green: #00d4aa;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --border: #2a2d3e;
+      --nav: #13162a;
+    }
 
-/* ── Layout ── */
-main{padding:1.5rem 2rem;max-width:1400px;margin:0 auto}
-.section{display:none}
-.section.active{display:block}
+    html {
+      scroll-behavior: smooth
+    }
 
-/* ── Cards ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
-.card-title{font-size:.95rem;font-weight:600;color:var(--text)}
-.section-title{font-size:1.2rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem}
-.section-title::before{content:'';display:inline-block;width:4px;height:1.2rem;background:var(--accent);border-radius:2px}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px
+    }
 
-/* ── Price Grid ── */
-.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-@media(max-width:900px){.price-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.price-grid{grid-template-columns:1fr}.nav-tabs{display:none}}
-.price-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem;transition:transform .2s,border-color .2s;cursor:default}
-.price-card:hover{transform:translateY(-3px);border-color:var(--accent)}
-.price-card .ticker{font-size:.75rem;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
-.price-card .price{font-size:1.6rem;font-weight:700;margin:.3rem 0}
-.price-card .change{display:flex;align-items:center;gap:.3rem;font-size:.85rem;font-weight:500}
-.up{color:var(--green)}
-.down{color:var(--red)}
-.badge{font-size:.65rem;padding:.2rem .5rem;border-radius:20px;font-weight:600;letter-spacing:.03em}
-.badge.up{background:rgba(0,212,170,.12);color:var(--green)}
-.badge.down{background:rgba(255,77,109,.12);color:var(--red)}
+    /* ── Navbar ── */
+    nav {
+      background: var(--nav);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px)
+    }
 
-/* ── Form ── */
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;margin-bottom:1rem}
-.form-group{display:flex;flex-direction:column;gap:.4rem}
-label{font-size:.78rem;font-weight:500;color:var(--muted)}
-input,select{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;color:var(--text);font-family:inherit;font-size:.875rem;outline:none;transition:border-color .2s}
-input:focus,select:focus{border-color:var(--accent)}
-select option{background:var(--card)}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:8px;padding:.65rem 1.4rem;color:#0a0f0d;font-weight:700;font-size:.875rem;cursor:pointer;font-family:inherit;transition:opacity .2s,transform .2s}
-.btn:hover{opacity:.9;transform:translateY(-1px)}
-.btn:active{transform:translateY(0)}
-.btn-sm{font-size:.75rem;padding:.35rem .7rem;border-radius:6px}
-.btn-danger{background:linear-gradient(135deg,var(--red),#cc3355)}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem
+    }
 
-/* ── Table ── */
-.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse}
-th{background:var(--card2);padding:.75rem 1rem;text-align:left;font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-td{padding:.75rem 1rem;border-top:1px solid var(--border);font-size:.84rem;vertical-align:middle}
-tr:hover td{background:rgba(255,255,255,.02)}
-.empty-row td{text-align:center;color:var(--muted);padding:2rem}
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), #0099ff);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff
+    }
 
-/* ── Stats ── */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem;display:flex;flex-direction:column;gap:.4rem}
-.stat-card .stat-label{font-size:.75rem;font-weight:500;color:var(--muted)}
-.stat-card .stat-value{font-size:1.5rem;font-weight:700;color:var(--text)}
-.stat-card .stat-sub{font-size:.78rem;color:var(--muted)}
-.chart-wrap{max-width:340px;margin:0 auto}
+    .logo-text h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text)
+    }
 
-/* ── Toast ── */
-#toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.25rem;font-size:.85rem;font-weight:500;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
-#toast.show{opacity:1;transform:translateY(0)}
-#toast.success{border-color:var(--accent);color:var(--accent)}
-#toast.error{border-color:var(--red);color:var(--red)}
+    .logo-text span {
+      font-size: .72rem;
+      color: var(--muted);
+      display: block
+    }
 
-/* ── Loading skeleton ── */
-.skeleton{background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;height:40px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.top-asset{margin-top:1rem;background:var(--card2);border-radius:10px;padding:1rem;display:flex;align-items:center;justify-content:space-between}
-</style>
+    .nav-tabs {
+      display: flex;
+      gap: .25rem
+    }
+
+    .nav-tab {
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: .5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: .85rem;
+      font-weight: 500;
+      transition: all .2s
+    }
+
+    .nav-tab:hover {
+      color: var(--text);
+      background: var(--card)
+    }
+
+    .nav-tab.active {
+      color: var(--accent);
+      background: rgba(0, 212, 170, .1)
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .4
+      }
+    }
+
+    /* ── Layout ── */
+    main {
+      padding: 1.5rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto
+    }
+
+    .section {
+      display: none
+    }
+
+    .section.active {
+      display: block
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem
+    }
+
+    .card-title {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1.2rem;
+      background: var(--accent);
+      border-radius: 2px
+    }
+
+    /* ── Price Grid ── */
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem
+    }
+
+    @media(max-width:900px) {
+      .price-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:560px) {
+      .price-grid {
+        grid-template-columns: 1fr
+      }
+
+      .nav-tabs {
+        display: none
+      }
+    }
+
+    .price-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      transition: transform .2s, border-color .2s;
+      cursor: default
+    }
+
+    .price-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent)
+    }
+
+    .price-card .ticker {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: .05em;
+      text-transform: uppercase
+    }
+
+    .price-card .price {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: .3rem 0
+    }
+
+    .price-card .change {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .85rem;
+      font-weight: 500
+    }
+
+    .up {
+      color: var(--green)
+    }
+
+    .down {
+      color: var(--red)
+    }
+
+    .badge {
+      font-size: .65rem;
+      padding: .2rem .5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: .03em
+    }
+
+    .badge.up {
+      background: rgba(0, 212, 170, .12);
+      color: var(--green)
+    }
+
+    .badge.down {
+      background: rgba(255, 77, 109, .12);
+      color: var(--red)
+    }
+
+    /* ── Form ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: .75rem;
+      margin-bottom: 1rem
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem
+    }
+
+    label {
+      font-size: .78rem;
+      font-weight: 500;
+      color: var(--muted)
+    }
+
+    input,
+    select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .6rem .9rem;
+      color: var(--text);
+      font-family: inherit;
+      font-size: .875rem;
+      outline: none;
+      transition: border-color .2s
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent)
+    }
+
+    select option {
+      background: var(--card)
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 8px;
+      padding: .65rem 1.4rem;
+      color: #0a0f0d;
+      font-weight: 700;
+      font-size: .875rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity .2s, transform .2s
+    }
+
+    .btn:hover {
+      opacity: .9;
+      transform: translateY(-1px)
+    }
+
+    .btn:active {
+      transform: translateY(0)
+    }
+
+    .btn-sm {
+      font-size: .75rem;
+      padding: .35rem .7rem;
+      border-radius: 6px
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--red), #cc3355)
+    }
+
+    /* ── Table ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border)
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th {
+      background: var(--card2);
+      padding: .75rem 1rem;
+      text-align: left;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    td {
+      padding: .75rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: .84rem;
+      vertical-align: middle
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, .02)
+    }
+
+    .empty-row td {
+      text-align: center;
+      color: var(--muted);
+      padding: 2rem
+    }
+
+    /* ── Stats ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem
+    }
+
+    .stat-card .stat-label {
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--muted)
+    }
+
+    .stat-card .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    .stat-card .stat-sub {
+      font-size: .78rem;
+      color: var(--muted)
+    }
+
+    .chart-wrap {
+      max-width: 340px;
+      margin: 0 auto
+    }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .85rem 1.25rem;
+      font-size: .85rem;
+      font-weight: 500;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .3s;
+      pointer-events: none
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    #toast.success {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    #toast.error {
+      border-color: var(--red);
+      color: var(--red)
+    }
+
+    /* ── Loading skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--card) 25%, var(--card2) 50%, var(--card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 8px;
+      height: 40px
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0
+      }
+
+      100% {
+        background-position: -200% 0
+      }
+    }
+
+    .top-asset {
+      margin-top: 1rem;
+      background: var(--card2);
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ── Navbar ── -->
-<nav>
-  <div class="logo">
-    <div class="logo-icon">FP</div>
-    <div class="logo-text">
-      <h1>FinPilot Lite</h1>
-      <span>Your financial co-pilot</span>
-    </div>
-  </div>
-  <div class="nav-tabs" id="navTabs">
-    <button class="nav-tab active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
-    <button class="nav-tab" onclick="showSection('portfolio',this)">💼 Portfolio</button>
-    <button class="nav-tab" onclick="showSection('trade',this)">⚡ Trade Simulator</button>
-    <button class="nav-tab" onclick="showSection('insights',this)">🔍 Insights</button>
-  </div>
-  <div class="status-dot" title="Live"></div>
-</nav>
-
-<main>
-
-<!-- ── Section 1: Dashboard ── -->
-<section id="dashboard" class="section active">
-  <div class="section-title">Market Overview</div>
-  <div class="price-grid" id="priceGrid">
-    <div class="skeleton"></div><div class="skeleton"></div>
-    <div class="skeleton"></div><div class="skeleton"></div>
-    <div class="skeleton"></div><div class="skeleton"></div>
-  </div>
-</section>
-
-<!-- ── Section 2: Portfolio ── -->
-<section id="portfolio" class="section">
-  <div class="section-title">My Portfolio</div>
-  <div class="card" style="margin-bottom:1.25rem">
-    <div class="card-header"><span class="card-title">Add Holding</span></div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="p-asset">Asset Symbol</label>
-        <input id="p-asset" placeholder="e.g. BTC, AAPL" autocomplete="off"/>
-      </div>
-      <div class="form-group">
-        <label for="p-qty">Quantity</label>
-        <input id="p-qty" type="number" placeholder="0.00" min="0" step="any"/>
-      </div>
-      <div class="form-group">
-        <label for="p-price">Buy Price (₹/$)</label>
-        <input id="p-price" type="number" placeholder="0.00" min="0" step="any"/>
+  <!-- ── Navbar ── -->
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">FP</div>
+      <div class="logo-text">
+        <h1>FinPilot Lite</h1>
+        <span>Your financial co-pilot</span>
       </div>
     </div>
-    <button class="btn" onclick="addPortfolio()">+ Add to Portfolio</button>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Asset</th><th>Qty</th><th>Buy Price</th><th>Current Value</th><th>P&amp;L</th><th>Action</th>
-      </tr></thead>
-      <tbody id="portfolioBody"><tr class="empty-row"><td colspan="6">Loading holdings…</td></tr></tbody>
-    </table>
-  </div>
-</section>
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+      <button class="nav-tab" onclick="showSection('portfolio',this)">💼 Portfolio</button>
+      <button class="nav-tab" onclick="showSection('trade',this)">⚡ Trade Simulator</button>
+      <button class="nav-tab" onclick="showSection('insights',this)">🔍 Insights</button>
+    </div>
+    <div class="status-dot" title="Live"></div>
+  </nav>
 
-<!-- ── Section 3: Trade Simulator ── -->
-<section id="trade" class="section">
-  <div class="section-title">Trade Simulator</div>
-  <div class="card" style="margin-bottom:1.25rem">
-    <div class="card-header"><span class="card-title">Simulate a Trade</span></div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="t-asset">Asset Symbol</label>
-        <input id="t-asset" placeholder="e.g. ETH, TSLA" autocomplete="off"/>
+  <main>
+
+    <!-- ── Section 1: Dashboard ── -->
+    <section id="dashboard" class="section active">
+      <div class="section-title">Market Overview</div>
+      <div class="price-grid" id="priceGrid">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
       </div>
-      <div class="form-group">
-        <label for="t-type">Type</label>
-        <select id="t-type">
-          <option value="buy">Buy</option>
-          <option value="sell">Sell</option>
-        </select>
+    </section>
+
+    <!-- ── Section 2: Portfolio ── -->
+    <section id="portfolio" class="section">
+      <div class="section-title">My Portfolio</div>
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-header"><span class="card-title">Add Holding</span></div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="p-asset">Asset Symbol</label>
+            <input id="p-asset" placeholder="e.g. BTC, AAPL" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="p-qty">Quantity</label>
+            <input id="p-qty" type="number" placeholder="0.00" min="0" step="any" />
+          </div>
+          <div class="form-group">
+            <label for="p-price">Buy Price (₹/$)</label>
+            <input id="p-price" type="number" placeholder="0.00" min="0" step="any" />
+          </div>
+        </div>
+        <button class="btn" onclick="addPortfolio()">+ Add to Portfolio</button>
       </div>
-      <div class="form-group">
-        <label for="t-qty">Quantity</label>
-        <input id="t-qty" type="number" placeholder="0.00" min="0" step="any"/>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Qty</th>
+              <th>Buy Price</th>
+              <th>Current Value</th>
+              <th>P&amp;L</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="portfolioBody">
+            <tr class="empty-row">
+              <td colspan="6">Loading holdings…</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="form-group">
-        <label for="t-price">Price (₹/$)</label>
-        <input id="t-price" type="number" placeholder="0.00" min="0" step="any"/>
+    </section>
+
+    <!-- ── Section 3: Trade Simulator ── -->
+    <section id="trade" class="section">
+      <div class="section-title">Trade Simulator</div>
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-header"><span class="card-title">Simulate a Trade</span></div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="t-asset">Asset Symbol</label>
+            <input id="t-asset" placeholder="e.g. ETH, TSLA" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="t-type">Type</label>
+            <select id="t-type">
+              <option value="buy">Buy</option>
+              <option value="sell">Sell</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="t-qty">Quantity</label>
+            <input id="t-qty" type="number" placeholder="0.00" min="0" step="any" />
+          </div>
+          <div class="form-group">
+            <label for="t-price">Price (₹/$)</label>
+            <input id="t-price" type="number" placeholder="0.00" min="0" step="any" />
+          </div>
+        </div>
+        <button class="btn" onclick="addTrade()">Execute Trade</button>
       </div>
-    </div>
-    <button class="btn" onclick="addTrade()">Execute Trade</button>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Asset</th><th>Type</th><th>Qty</th><th>Price</th><th>Total Value</th><th>Time</th>
-      </tr></thead>
-      <tbody id="tradesBody"><tr class="empty-row"><td colspan="6">Loading trades…</td></tr></tbody>
-    </table>
-  </div>
-</section>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Type</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total Value</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="tradesBody">
+            <tr class="empty-row">
+              <td colspan="6">Loading trades…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-<!-- ── Section 4: Insights ── -->
-<section id="insights" class="section">
-  <div class="section-title">Portfolio Insights</div>
-  <div class="stats-row" id="statsRow">
-    <div class="stat-card">
-      <div class="stat-label">Total Invested</div>
-      <div class="stat-value" id="totalInvested">—</div>
-      <div class="stat-sub">Across all holdings</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Holdings</div>
-      <div class="stat-value" id="totalHoldings">—</div>
-      <div class="stat-sub">Unique positions</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Current Value</div>
-      <div class="stat-value" id="totalCurrentValue">—</div>
-      <div class="stat-sub">Based on live prices</div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start">
-    <div class="card">
-      <div class="card-header"><span class="card-title">Allocation</span></div>
-      <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
-      <div id="noChartData" style="text-align:center;color:var(--muted);padding:2rem;display:none">No portfolio data yet</div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Top Performer</span></div>
-      <div id="topAsset"><p style="color:var(--muted)">Add holdings to see insights.</p></div>
-    </div>
-  </div>
-</section>
+    <!-- ── Section 4: Insights ── -->
+    <section id="insights" class="section">
+      <div class="section-title">Portfolio Insights</div>
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card">
+          <div class="stat-label">Total Invested</div>
+          <div class="stat-value" id="totalInvested">—</div>
+          <div class="stat-sub">Across all holdings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Holdings</div>
+          <div class="stat-value" id="totalHoldings">—</div>
+          <div class="stat-sub">Unique positions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Current Value</div>
+          <div class="stat-value" id="totalCurrentValue">—</div>
+          <div class="stat-sub">Based on live prices</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Allocation</span></div>
+          <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
+          <div id="noChartData" style="text-align:center;color:var(--muted);padding:2rem;display:none">No portfolio data
+            yet</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Top Performer</span></div>
+          <div id="topAsset">
+            <p style="color:var(--muted)">Add holdings to see insights.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-</main>
+  </main>
 
-<!-- Toast -->
-<div id="toast"></div>
+  <!-- Toast -->
+  <div id="toast"></div>
 
-<script>
-const API = 'http://localhost:3000/api';
-let prices = {};
-let portfolioData = [];
-let donutChart = null;
+  <script>
+    const API = 'https://finpilot-lite-backend.onrender.com';
+    let prices = {};
+    let portfolioData = [];
+    let donutChart = null;
 
-// ── Utilities ──────────────────────────────────────────────────
-function fmt(n){return new Intl.NumberFormat('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)}
-function fmtDate(s){return new Date(s).toLocaleString('en-IN',{dateStyle:'short',timeStyle:'short'})}
+    // ── Utilities ──────────────────────────────────────────────────
+    function fmt(n) { return new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) }
+    function fmtDate(s) { return new Date(s).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }) }
 
-function toast(msg,type='success'){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.className='show '+type;
-  setTimeout(()=>el.className='',3000);
-}
+    function toast(msg, type = 'success') {
+      const el = document.getElementById('toast');
+      el.textContent = msg; el.className = 'show ' + type;
+      setTimeout(() => el.className = '', 3000);
+    }
 
-// ── Navigation ─────────────────────────────────────────────────
-function showSection(id,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if(btn)btn.classList.add('active');
-  if(id==='portfolio')loadPortfolio();
-  if(id==='trade')loadTrades();
-  if(id==='insights')loadInsights();
-}
+    // ── Navigation ─────────────────────────────────────────────────
+    function showSection(id, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (btn) btn.classList.add('active');
+      if (id === 'portfolio') loadPortfolio();
+      if (id === 'trade') loadTrades();
+      if (id === 'insights') loadInsights();
+    }
 
-// ── DASHBOARD ─────────────────────────────────────────────────
-async function loadPrices(){
-  try{
-    const res=await fetch(API+'/prices');
-    prices=await res.json();
-    const grid=document.getElementById('priceGrid');
-    grid.innerHTML='';
-    Object.entries(prices).forEach(([sym,{price,change}])=>{
-      const up=change>=0;
-      grid.innerHTML+=`
+    // ── DASHBOARD ─────────────────────────────────────────────────
+    async function loadPrices() {
+      try {
+        const res = await fetch(API + '/prices');
+        prices = await res.json();
+        const grid = document.getElementById('priceGrid');
+        grid.innerHTML = '';
+        Object.entries(prices).forEach(([sym, { price, change }]) => {
+          const up = change >= 0;
+          grid.innerHTML += `
       <div class="price-card">
         <div class="ticker">${sym}</div>
         <div class="price">₹${fmt(price)}</div>
-        <div class="change ${up?'up':'down'}">
-          ${up?'▲':'▼'} ${Math.abs(change)}%
-          <span class="badge ${up?'up':'down'}">${up?'+':''}${change}%</span>
+        <div class="change ${up ? 'up' : 'down'}">
+          ${up ? '▲' : '▼'} ${Math.abs(change)}%
+          <span class="badge ${up ? 'up' : 'down'}">${up ? '+' : ''}${change}%</span>
         </div>
       </div>`;
-    });
-  }catch(e){
-    document.getElementById('priceGrid').innerHTML='<p style="color:var(--red);grid-column:1/-1">Failed to load prices. Is the server running?</p>';
-  }
-}
+        });
+      } catch (e) {
+        document.getElementById('priceGrid').innerHTML = '<p style="color:var(--red);grid-column:1/-1">Failed to load prices. Is the server running?</p>';
+      }
+    }
 
-// ── PORTFOLIO ─────────────────────────────────────────────────
-async function loadPortfolio(){
-  try{
-    const res=await fetch(API+'/portfolio');
-    portfolioData=await res.json();
-    renderPortfolio();
-  }catch(e){toast('Could not load portfolio','error')}
-}
+    // ── PORTFOLIO ─────────────────────────────────────────────────
+    async function loadPortfolio() {
+      try {
+        const res = await fetch(API + '/portfolio');
+        portfolioData = await res.json();
+        renderPortfolio();
+      } catch (e) { toast('Could not load portfolio', 'error') }
+    }
 
-function renderPortfolio(){
-  const tb=document.getElementById('portfolioBody');
-  if(!portfolioData.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">No holdings yet. Add one above!</td></tr>';return;}
-  tb.innerHTML=portfolioData.map(row=>{
-    const cur=prices[row.asset]?.price||row.buy_price;
-    const curVal=row.quantity*cur;
-    const invested=row.quantity*row.buy_price;
-    const pnl=curVal-invested;
-    const pnlPct=((pnl/invested)*100).toFixed(2);
-    const up=pnl>=0;
-    return`<tr>
+    function renderPortfolio() {
+      const tb = document.getElementById('portfolioBody');
+      if (!portfolioData.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No holdings yet. Add one above!</td></tr>'; return; }
+      tb.innerHTML = portfolioData.map(row => {
+        const cur = prices[row.asset]?.price || row.buy_price;
+        const curVal = row.quantity * cur;
+        const invested = row.quantity * row.buy_price;
+        const pnl = curVal - invested;
+        const pnlPct = ((pnl / invested) * 100).toFixed(2);
+        const up = pnl >= 0;
+        return `<tr>
       <td><strong>${row.asset}</strong></td>
       <td>${row.quantity}</td>
       <td>₹${fmt(row.buy_price)}</td>
       <td>₹${fmt(curVal)}</td>
-      <td class="${up?'up':'down'}">${up?'+':''}₹${fmt(pnl)} (${up?'+':''}${pnlPct}%)</td>
+      <td class="${up ? 'up' : 'down'}">${up ? '+' : ''}₹${fmt(pnl)} (${up ? '+' : ''}${pnlPct}%)</td>
       <td><button class="btn btn-sm btn-danger" onclick="deletePortfolio(${row.id})">Delete</button></td>
     </tr>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-async function addPortfolio(){
-  const asset=document.getElementById('p-asset').value.trim().toUpperCase();
-  const quantity=parseFloat(document.getElementById('p-qty').value);
-  const buy_price=parseFloat(document.getElementById('p-price').value);
-  if(!asset||isNaN(quantity)||isNaN(buy_price)){toast('Fill all fields correctly','error');return;}
-  try{
-    const res=await fetch(API+'/portfolio',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({asset,quantity,buy_price})});
-    if(!res.ok)throw new Error();
-    toast('Holding added!');
-    document.getElementById('p-asset').value='';
-    document.getElementById('p-qty').value='';
-    document.getElementById('p-price').value='';
-    loadPortfolio();
-  }catch(e){toast('Failed to add holding','error')}
-}
+    async function addPortfolio() {
+      const asset = document.getElementById('p-asset').value.trim().toUpperCase();
+      const quantity = parseFloat(document.getElementById('p-qty').value);
+      const buy_price = parseFloat(document.getElementById('p-price').value);
+      if (!asset || isNaN(quantity) || isNaN(buy_price)) { toast('Fill all fields correctly', 'error'); return; }
+      try {
+        const res = await fetch(API + '/portfolio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ asset, quantity, buy_price }) });
+        if (!res.ok) throw new Error();
+        toast('Holding added!');
+        document.getElementById('p-asset').value = '';
+        document.getElementById('p-qty').value = '';
+        document.getElementById('p-price').value = '';
+        loadPortfolio();
+      } catch (e) { toast('Failed to add holding', 'error') }
+    }
 
-async function deletePortfolio(id){
-  if(!confirm('Delete this holding?'))return;
-  try{
-    await fetch(API+'/portfolio/'+id,{method:'DELETE'});
-    toast('Holding removed');
-    loadPortfolio();
-  }catch(e){toast('Delete failed','error')}
-}
+    async function deletePortfolio(id) {
+      if (!confirm('Delete this holding?')) return;
+      try {
+        await fetch(API + '/portfolio/' + id, { method: 'DELETE' });
+        toast('Holding removed');
+        loadPortfolio();
+      } catch (e) { toast('Delete failed', 'error') }
+    }
 
-// ── TRADE SIMULATOR ───────────────────────────────────────────
-async function loadTrades(){
-  try{
-    const res=await fetch(API+'/trades');
-    const trades=await res.json();
-    const tb=document.getElementById('tradesBody');
-    if(!trades.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">No trades yet.</td></tr>';return;}
-    tb.innerHTML=trades.map(t=>{
-      const total=t.quantity*t.price;
-      const isBuy=t.type==='buy';
-      return`<tr>
+    // ── TRADE SIMULATOR ───────────────────────────────────────────
+    async function loadTrades() {
+      try {
+        const res = await fetch(API + '/trades');
+        const trades = await res.json();
+        const tb = document.getElementById('tradesBody');
+        if (!trades.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No trades yet.</td></tr>'; return; }
+        tb.innerHTML = trades.map(t => {
+          const total = t.quantity * t.price;
+          const isBuy = t.type === 'buy';
+          return `<tr>
         <td><strong>${t.asset}</strong></td>
-        <td><span class="badge ${isBuy?'up':'down'}">${t.type.toUpperCase()}</span></td>
+        <td><span class="badge ${isBuy ? 'up' : 'down'}">${t.type.toUpperCase()}</span></td>
         <td>${t.quantity}</td>
         <td>₹${fmt(t.price)}</td>
         <td>₹${fmt(total)}</td>
         <td style="color:var(--muted)">${fmtDate(t.created_at)}</td>
       </tr>`;
-    }).join('');
-  }catch(e){toast('Could not load trades','error')}
-}
-
-async function addTrade(){
-  const asset=document.getElementById('t-asset').value.trim().toUpperCase();
-  const type=document.getElementById('t-type').value;
-  const quantity=parseFloat(document.getElementById('t-qty').value);
-  const price=parseFloat(document.getElementById('t-price').value);
-  if(!asset||isNaN(quantity)||isNaN(price)){toast('Fill all fields correctly','error');return;}
-  try{
-    const res=await fetch(API+'/trade',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({asset,type,quantity,price})});
-    if(!res.ok)throw new Error();
-    toast(`${type.toUpperCase()} trade recorded!`);
-    document.getElementById('t-asset').value='';
-    document.getElementById('t-qty').value='';
-    document.getElementById('t-price').value='';
-    loadTrades();
-  }catch(e){toast('Failed to record trade','error')}
-}
-
-// ── INSIGHTS ──────────────────────────────────────────────────
-async function loadInsights(){
-  try{
-    const res=await fetch(API+'/portfolio');
-    const data=await res.json();
-    const totalInvested=data.reduce((s,r)=>s+(r.quantity*r.buy_price),0);
-    const totalCur=data.reduce((s,r)=>s+(r.quantity*(prices[r.asset]?.price||r.buy_price)),0);
-    document.getElementById('totalInvested').textContent='₹'+fmt(totalInvested);
-    document.getElementById('totalHoldings').textContent=data.length;
-    document.getElementById('totalCurrentValue').textContent='₹'+fmt(totalCur);
-
-    // Donut chart
-    if(donutChart){donutChart.destroy();donutChart=null;}
-    const canvas=document.getElementById('donutChart');
-    const noData=document.getElementById('noChartData');
-    if(!data.length){canvas.style.display='none';noData.style.display='block';}
-    else{
-      canvas.style.display='block';noData.style.display='none';
-      const palette=['#00d4aa','#0099ff','#ff4d6d','#f59e0b','#a855f7','#ec4899'];
-      const labels=data.map(r=>r.asset);
-      const vals=data.map(r=>r.quantity*(prices[r.asset]?.price||r.buy_price));
-      donutChart=new Chart(canvas,{
-        type:'doughnut',
-        data:{labels,datasets:[{data:vals,backgroundColor:palette.slice(0,data.length),borderWidth:0,hoverOffset:8}]},
-        options:{plugins:{legend:{labels:{color:'#e8eaf0',font:{family:'Inter'}}}},cutout:'65%'}
-      });
+        }).join('');
+      } catch (e) { toast('Could not load trades', 'error') }
     }
 
-    // Top performer
-    const topEl=document.getElementById('topAsset');
-    if(!data.length){topEl.innerHTML='<p style="color:var(--muted)">Add holdings to see insights.</p>';return;}
-    const top=data.reduce((best,r)=>{
-      const pnlPct=((prices[r.asset]?.price||r.buy_price)-r.buy_price)/r.buy_price*100;
-      const bestPct=((prices[best.asset]?.price||best.buy_price)-best.buy_price)/best.buy_price*100;
-      return pnlPct>bestPct?r:best;
-    },data[0]);
-    const topCur=prices[top.asset]?.price||top.buy_price;
-    const topPnlPct=(((topCur-top.buy_price)/top.buy_price)*100).toFixed(2);
-    const topUp=topPnlPct>=0;
-    topEl.innerHTML=`
+    async function addTrade() {
+      const asset = document.getElementById('t-asset').value.trim().toUpperCase();
+      const type = document.getElementById('t-type').value;
+      const quantity = parseFloat(document.getElementById('t-qty').value);
+      const price = parseFloat(document.getElementById('t-price').value);
+      if (!asset || isNaN(quantity) || isNaN(price)) { toast('Fill all fields correctly', 'error'); return; }
+      try {
+        const res = await fetch(API + '/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ asset, type, quantity, price }) });
+        if (!res.ok) throw new Error();
+        toast(`${type.toUpperCase()} trade recorded!`);
+        document.getElementById('t-asset').value = '';
+        document.getElementById('t-qty').value = '';
+        document.getElementById('t-price').value = '';
+        loadTrades();
+      } catch (e) { toast('Failed to record trade', 'error') }
+    }
+
+    // ── INSIGHTS ──────────────────────────────────────────────────
+    async function loadInsights() {
+      try {
+        const res = await fetch(API + '/portfolio');
+        const data = await res.json();
+        const totalInvested = data.reduce((s, r) => s + (r.quantity * r.buy_price), 0);
+        const totalCur = data.reduce((s, r) => s + (r.quantity * (prices[r.asset]?.price || r.buy_price)), 0);
+        document.getElementById('totalInvested').textContent = '₹' + fmt(totalInvested);
+        document.getElementById('totalHoldings').textContent = data.length;
+        document.getElementById('totalCurrentValue').textContent = '₹' + fmt(totalCur);
+
+        // Donut chart
+        if (donutChart) { donutChart.destroy(); donutChart = null; }
+        const canvas = document.getElementById('donutChart');
+        const noData = document.getElementById('noChartData');
+        if (!data.length) { canvas.style.display = 'none'; noData.style.display = 'block'; }
+        else {
+          canvas.style.display = 'block'; noData.style.display = 'none';
+          const palette = ['#00d4aa', '#0099ff', '#ff4d6d', '#f59e0b', '#a855f7', '#ec4899'];
+          const labels = data.map(r => r.asset);
+          const vals = data.map(r => r.quantity * (prices[r.asset]?.price || r.buy_price));
+          donutChart = new Chart(canvas, {
+            type: 'doughnut',
+            data: { labels, datasets: [{ data: vals, backgroundColor: palette.slice(0, data.length), borderWidth: 0, hoverOffset: 8 }] },
+            options: { plugins: { legend: { labels: { color: '#e8eaf0', font: { family: 'Inter' } } } }, cutout: '65%' }
+          });
+        }
+
+        // Top performer
+        const topEl = document.getElementById('topAsset');
+        if (!data.length) { topEl.innerHTML = '<p style="color:var(--muted)">Add holdings to see insights.</p>'; return; }
+        const top = data.reduce((best, r) => {
+          const pnlPct = ((prices[r.asset]?.price || r.buy_price) - r.buy_price) / r.buy_price * 100;
+          const bestPct = ((prices[best.asset]?.price || best.buy_price) - best.buy_price) / best.buy_price * 100;
+          return pnlPct > bestPct ? r : best;
+        }, data[0]);
+        const topCur = prices[top.asset]?.price || top.buy_price;
+        const topPnlPct = (((topCur - top.buy_price) / top.buy_price) * 100).toFixed(2);
+        const topUp = topPnlPct >= 0;
+        topEl.innerHTML = `
       <div class="top-asset">
         <div>
           <div style="font-size:1.4rem;font-weight:700">${top.asset}</div>
@@ -431,14 +854,15 @@ async function loadInsights(){
         </div>
         <div style="text-align:right">
           <div style="font-size:1.2rem;font-weight:700">₹${fmt(topCur)}</div>
-          <div class="badge ${topUp?'up':'down'}" style="margin-top:.3rem">${topUp?'+':''}${topPnlPct}%</div>
+          <div class="badge ${topUp ? 'up' : 'down'}" style="margin-top:.3rem">${topUp ? '+' : ''}${topPnlPct}%</div>
         </div>
       </div>`;
-  }catch(e){toast('Could not load insights','error')}
-}
+      } catch (e) { toast('Could not load insights', 'error') }
+    }
 
-// ── Init ──────────────────────────────────────────────────────
-loadPrices();
-</script>
+    // ── Init ──────────────────────────────────────────────────────
+    loadPrices();
+  </script>
 </body>
+
 </html>
