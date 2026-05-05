@@ -46,12 +46,21 @@ const supabase = createClient(
 
 // ─── Mock Price Data ─────────────────────────────────────────────────────────
 const MOCK_PRICES = {
-  BTC:      { price: 67000, change: 2.4  },
-  ETH:      { price: 3500,  change: -1.2 },
-  AAPL:     { price: 189,   change: 0.8  },
-  TSLA:     { price: 248,   change: -0.5 },
-  RELIANCE: { price: 2950,  change: 1.1  },
-  INFY:     { price: 1780,  change: 0.3  },
+  BTC: { price: 67000.00, change: 2.4 },
+  ETH: { price: 3500.00, change: -1.2 },
+  USDT: { price: 1.00, change: 0.01 },
+  BNB: { price: 590.00, change: 1.5 },
+  SOL: { price: 145.00, change: 4.2 },
+  USDC: { price: 1.00, change: 0.00 },
+  XRP: { price: 0.62, change: -0.5 },
+  DOGE: { price: 0.15, change: 5.1 },
+  TON: { price: 6.80, change: 2.2 },
+  ADA: { price: 0.45, change: -1.1 },
+  // Keep your existing stocks too!
+  AAPL: { price: 189.00, change: 0.8 },
+  TSLA: { price: 248.00, change: -0.5 },
+  RELIANCE: { price: 2950.00, change: 1.1 },
+  INFY: { price: 1780.00, change: 0.3 }
 };
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
