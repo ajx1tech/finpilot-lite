@@ -2,6 +2,7 @@
 
 > A full-stack personal finance dashboard to track your portfolio, simulate trades, and view market insights — built with Node.js, Express, Supabase, and vanilla JS.
 
+Working demo:- https://www.loom.com/share/611f8c5a6f5c42a785b5ff77d0e5ea55
 ---
 
 ## 📁 Project Structure
