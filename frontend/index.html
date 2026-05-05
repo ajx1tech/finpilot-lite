@@ -519,6 +519,20 @@
 
     <!-- ── Section 1: Dashboard ── -->
     <section id="dashboard" class="section active">
+<div style="background: #1e222d; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid #2b313f;">
+    <h3 style="color: #8b93a6; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Global Market Trend (24H)</h3>
+    <canvas id="heroTrendChart" height="60"></canvas>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem;">
+    <div style="background: #1e222d; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #00ffa3;">
+        <p style="color: #8b93a6; font-size: 0.9rem; margin-bottom: 0.5rem;">Total Capital Deployed</p>
+        <h2 id="dashboard-total-invested" style="font-size: 2rem; color: white;">₹0.00</h2>
+    </div>
+    <div style="background: #1e222d; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3b82f6;">
+        <p style="color: #8b93a6; font-size: 0.9rem; margin-bottom: 0.5rem;">Live Portfolio Value</p>
+        <h2 id="dashboard-total-value" style="font-size: 2rem; color: white;">₹0.00</h2>
+    </div>
+</div>
       <div class="section-title">Market Overview</div>
       <div class="price-grid" id="priceGrid">
         <div class="skeleton"></div>
@@ -818,6 +832,9 @@
         document.getElementById('totalHoldings').textContent = data.length;
         document.getElementById('totalCurrentValue').textContent = '₹' + fmt(totalCur);
 
+        if(document.getElementById('dashboard-total-invested')) document.getElementById('dashboard-total-invested').innerText = '₹' + fmt(totalInvested);
+        if(document.getElementById('dashboard-total-value')) document.getElementById('dashboard-total-value').innerText = '₹' + fmt(totalCur);
+
         // Donut chart
         if (donutChart) { donutChart.destroy(); donutChart = null; }
         const canvas = document.getElementById('donutChart');
@@ -862,6 +879,22 @@
 
     // ── Init ──────────────────────────────────────────────────────
     loadPrices();
+    setTimeout(() => {
+        const ctx = document.getElementById('heroTrendChart');
+        if (ctx) {
+            let gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, 'rgba(0, 255, 163, 0.3)');
+            gradient.addColorStop(1, 'rgba(0, 255, 163, 0.0)');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1','2','3','4','5','6','7','8','9','10'],
+                    datasets: [{ data: [65000, 64800, 65500, 66000, 65900, 67200, 66800, 68000, 67900, 69500], borderColor: '#00ffa3', backgroundColor: gradient, borderWidth: 3, fill: true, tension: 0.4, pointRadius: 0 }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+            });
+        }
+    }, 500);
   </script>
 </body>
 
